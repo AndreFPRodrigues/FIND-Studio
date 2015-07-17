@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- branding and titles -->
+    <string name="app_name">FIND Service</string>
+    <string name="icon_label">FIND Settings</string>
+
+    <!-- settings default values -->
+        <!-- was 10000-->
+    
+    <string name="value_t_beac">30000</string>
+    <string name="value_t_pro">40000</string>
+    <!-- was 300000 -->
+    <string name="value_t_scan">100000</string>
+    <string name="value_t_con">40000</string>
+    <!-- was 40000 -->
+    <string name="value_t_int">300000</string>
+    <string name="value_t_freq">2000</string>
+    <string name="value_t_api">server</string>
+    <string name="value_t_web">5000</string>
+
+    <!-- settings keys for storing and retrieving values -->
+    <string name="key_t_beac">t_beac</string>
+    <string name="key_t_pro">t_pro</string>
+    <string name="key_t_scan">t_beac</string>
+    <string name="key_t_con">t_pro</string>
+    <string name="key_t_int">t_int</string>
+    <string name="key_t_freq">t_freq</string>
+    <string name="key_t_api">t_api</string>
+    <string name="key_internet">internet</string>
+    <string name="key_t_web">t_web</string>
+    <string name="key_t_nodeid">t_nodeid</string>
+
+    <!-- settings labels -->
+    <string name="t_pro_title">Minimum time (ms) a mobile device is providing access point functionality for connected stations</string>
+    <string name="t_beac_title">Minimum time (ms) advertising presence in access point mode</string>
+    <string name="t_scan_title">Minimum time (ms) a mobile device scans for access points</string>
+    <string name="t_con_title">Minimum time (ms) a station stays connected with a specific access point</string>
+    <string name="t_int_title">Minimum time (ms) a mobile device scans for a internet connection</string>
+    <string name="t_freq_title">Time (ms) to wait between sending messages to network while on station mode</string>
+    <string name="internet_title">Internet mode</string>
+    <string name="internet">enable internet state</string>
+    <string name="t_api_title">Webservice endpoint</string>
+    <string name="t_api_desc">Preferred API webservice endpoint. The methods will be appended to this address.</string>
+    <string name="t_web_title">Min. Internet time</string>
+    <string name="t_web_desc">Minimum time (ms) to stay connected to Internet before changing to next state.</string>
+    <string name="t_nodeid_title">Node ID</string>
+    <string name="t_nodeid_desc">Node ID to use. No spaces please. If empty, a new node ID will be generated to this node on next start.</string>
+    <string name="associationPreferences">Association Preferences</string>
+    <string name="stopService">Stop Service</string>
+    <string name="noSimulations">No alerts available</string>
+    <string name="associate">Associate with alert</string>
+    <string name="disassociate">Disassociate from alert</string>
+    <string name="syncService"> Waiting for internet connection to sync files</string>
+    <string name="down_rescue">Get Rescuer</string>
+    <string name="down_message">Get Messager</string>
+
+</resources>

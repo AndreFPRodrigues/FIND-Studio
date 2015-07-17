@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/down_message"
+          android:title="@string/down_message"
+          android:showAsAction="ifRoom"/>
+    <item android:id="@+id/down_rescue"
+          android:title="@string/down_rescue" /> 
+</menu>
