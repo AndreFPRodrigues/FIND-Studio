@@ -49,7 +49,7 @@ public class StateScanning extends AState {
 				String mac = bSSID;
 
 				if (mac != null) {
-					String remoteId = NodeIdentification.getNodeId(mac);
+					String remoteId = mac; //NodeIdentification.getNodeId(mac);
 					environment.deliverMessage("connected to AP! (node ID is "
 							+ remoteId + " )");
 				} else {

@@ -42,9 +42,9 @@ public class MessagesGenerator {
 			@Override
 			public void run() {
 				// add auto-message to be accumulated
-				Message autoMessage = environment.createTextMessage("");
-				environment.pushMessageToQueue(autoMessage);
 				if (autoGenaration) {
+					Message autoMessage = environment.createTextMessage("");
+					environment.pushMessageToQueue(autoMessage);
 					getMessage(rate);
 				}
 			}

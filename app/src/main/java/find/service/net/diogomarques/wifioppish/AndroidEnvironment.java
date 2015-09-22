@@ -15,6 +15,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Button;
+
+import find.service.R;
 import find.service.net.diogomarques.wifioppish.INetworkingFacade.IListener;
 import find.service.net.diogomarques.wifioppish.networking.Message;
 import find.service.net.diogomarques.wifioppish.sensors.BatterySensor;
@@ -60,7 +63,7 @@ public class AndroidEnvironment implements IEnvironment {
 	private Semaphore semNextState;
 	private Context context;
 
-	private ConcurrentForwardingQueue mQueue;
+	//private ConcurrentForwardingQueue mQueue;
 
 	private String myNodeID;
 	private String myAccountName;
@@ -84,6 +87,8 @@ public class AndroidEnvironment implements IEnvironment {
 
 	private static IListener currentListener;
 
+	private MessagesDAO messagesDAO;
+
 	/**
 	 * Convenience constructor for {@link #createInstance(Context, Handler)}.
 	 */
@@ -104,6 +109,7 @@ public class AndroidEnvironment implements IEnvironment {
 			return instance;
 
 		AndroidEnvironment environment = new AndroidEnvironment();
+
 		// states
 		StateBeaconing beaconing = new StateBeaconing(environment);
 		StateProviding providing = new StateProviding(environment);
@@ -133,6 +139,9 @@ public class AndroidEnvironment implements IEnvironment {
 
 		// get/generate the node ID and spread the word
 		environment.myNodeID = environment.mPreferences.getNodeId();
+
+		environment.messagesDAO = new MessagesDAO(c);
+
 		ContentValues contentvalues = new ContentValues();
 		contentvalues.put(MessagesProvider.COL_STATUSKEY, "nodeid");
 		contentvalues.put(MessagesProvider.COL_STATUSVALUE,
@@ -152,7 +161,7 @@ public class AndroidEnvironment implements IEnvironment {
 		Log.i("AccountName", "My account name is: " + environment.myAccountName);
 
 		// start forwarding sending queue
-		environment.mQueue = new ConcurrentForwardingQueue();
+		//environment.mQueue = new ConcurrentForwardingQueue();
 		// stats
 		environment.totalReceived = environment.totalSent = 0;
 		// duplicate hashes
@@ -318,11 +327,11 @@ public class AndroidEnvironment implements IEnvironment {
 		// duplicate check
 		Integer msgHashcode = Integer.valueOf(m.hashCode());
 		if (!duplicates.contains(msgHashcode)) {
-			mQueue.add(m);
+			//mQueue.add(m);
 			Log.w("SendingQueue", "New message to queue: " + m
 					+ " (received by " + myNodeID + ")");
-			Log.w("SendingQueue", "Added message to queue, " + mQueue.size()
-					+ " messages remaining");
+			//Log.w("SendingQueue", "Added message to queue, " + mQueue.size()
+			//		+ " messages remaining");
 			duplicates.add(msgHashcode);
 
 			// also store Message in Persistent Storage
@@ -336,14 +345,19 @@ public class AndroidEnvironment implements IEnvironment {
 
 	@Override
 	public List<Message> fetchMessagesFromQueue() {
+
+		return messagesDAO.getMessages();
+
+		/*
 		ArrayList<Message> messages = new ArrayList<Message>();
 
 		for (Message m : mQueue)
 			messages.add(m);
 
-		return messages;
+		return messages;*/
 	}
 
+	/*
 	@Override
 	public boolean hasMessages() {
 		return !mQueue.isEmpty();
@@ -365,6 +379,7 @@ public class AndroidEnvironment implements IEnvironment {
 
 		return removed;
 	}
+	*/
 
 	@Override
 	public void updateStats(int sent, int received) {
@@ -469,6 +484,8 @@ public class AndroidEnvironment implements IEnvironment {
 	 */
 	private void storeMessage(Message msg) {
 
+		messagesDAO.insert(msg);
+		/*
 		ContentValues cv = new ContentValues();
 		cv.put(MessagesProvider.COL_ID,
 				String.format("%s%d", msg.getNodeId(), msg.getTimestamp()));
@@ -511,10 +528,14 @@ public class AndroidEnvironment implements IEnvironment {
 		if (uri != null)
 			Log.i("storeMessage",
 					"Message persistently stored via " + uri.toString());
+					*/
 	}
 
-	private void updateMessage(Message msg) {
+	@Override
+	public void updateMessage(Message msg) {
 
+		messagesDAO.updateStatus(msg);
+		/*
 		ContentValues cv = new ContentValues();
 		cv.put(MessagesProvider.COL_STATUS, msg.getStatus());
 		cv.put(MessagesProvider.COL_STATUS_TIME, msg.getStatusTime());
@@ -529,6 +550,7 @@ public class AndroidEnvironment implements IEnvironment {
 				+ MessagesProvider.METHOD_SENT + "/" + msg.getNodeId()
 				+ msg.getTimestamp());
 		context.getContentResolver().update(sentUri, cv, null, null);
+		*/
 	}
 
 	@Override
@@ -613,4 +635,8 @@ public class AndroidEnvironment implements IEnvironment {
 
 	}
 
+	@Override
+	public void onServiceStopped() {
+
+	}
 }

@@ -20,7 +20,7 @@ public class DownloadFile {
 
 	private static int downloadedSize = 0;
 	private static int totalSize = 0;
-	private static String dwnload_file_path = "http://accessible-serv.lasige.di.fc.ul.pt/~lost/world.sqlitedb";
+	private static String dwnload_file_path = "http://accessible-serv.lasige.di.fc.ul.pt/~lost/LostMap/world.sqlitedb";
 
 	public static void downloadTileDB() {
 		new Thread(new Runnable() {

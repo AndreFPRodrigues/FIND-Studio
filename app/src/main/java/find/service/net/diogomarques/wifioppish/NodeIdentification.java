@@ -34,7 +34,7 @@ public class NodeIdentification {
 		WifiInfo info = manager.getConnectionInfo();
 		String address = info.getMacAddress();
 		
-		return getNodeId(address);
+		return address;
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class NodeIdentification {
 	 * @param macAddress Mac address from which the Id will be generated
 	 * @return Node's Id, or unknown if the MD5 algorithm is not implemented in the Java version 
 	 */
-	public static String getNodeId(String macAddress) {
+/*	public static String getNodeId(String macAddress) {
 		int maxLength = 6;
 		
 		// normalize MAC Address
@@ -73,5 +73,5 @@ public class NodeIdentification {
 		}
 		
 		return "unknown";
-	}
+	} */
 }

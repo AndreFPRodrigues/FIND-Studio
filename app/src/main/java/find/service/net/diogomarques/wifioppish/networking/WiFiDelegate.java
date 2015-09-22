@@ -31,16 +31,23 @@ public class WiFiDelegate {
 	private final Context mContext;
 	private final IEnvironment mEnvironment;
 
+	private BroadcastReceiver scanReceiver;
+
+	private boolean registered;
+
 	public WiFiDelegate(Context context, IEnvironment environment) {
 		mContext = context;
 		mEnvironment = environment;
 	}
 
+	public BroadcastReceiver getScanReceiver(){
+		return scanReceiver;
+	}
 	/*
 	 * There is not API for checking if a receiver is registered. This is a
 	 * workaround.
 	 */
-	private boolean safeUnregisterReceiver(BroadcastReceiver receiver) {
+	public boolean safeUnregisterReceiver(BroadcastReceiver receiver) {
 		boolean sucess = false;
 		try {
 			mContext.unregisterReceiver(receiver);
@@ -78,7 +85,7 @@ public class WiFiDelegate {
 		manager.setWifiEnabled(true);
 
 		// start receiver for scans
-		final BroadcastReceiver scanReceiver = new BroadcastReceiver() {
+		scanReceiver = new BroadcastReceiver() {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -121,17 +128,21 @@ public class WiFiDelegate {
 					Log.w(TAG, "enableNetwork -> " + enableNetwork);
 					boolean reconnect = manager.reconnect();
 					Log.w(TAG, "reconnect -> " + reconnect);
-					safeUnregisterReceiver(this);
+					registered = !safeUnregisterReceiver(this);
 					connected.set(true);
 					listener.onAPConnection(bestSignal.BSSID);
 				}
 			}
 		};
-		;
-		mContext.registerReceiver(scanReceiver, new IntentFilter(
-				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+		Log.d(TAG, "scan results for ap registered");
+		if(!registered) {
+			mContext.registerReceiver(scanReceiver, new IntentFilter(
+					WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+			registered = true;
+		}
 		// scan immediately one time - fast reconnect
-		// "In this case nevertheless, the node will not scan for t_scan seconds (which might be very long) but immediately try to ям?nd a new AP or becomes one within a few seconds (fast reconnect)."
+		// "In this case nevertheless, the node will not scan for t_scan seconds (which might be very long) but immediately try to a new AP or becomes one within a few seconds (fast reconnect)."
 		manager.startScan();
 		if (!connected.get()) {
 			scanTick(timeoutMilis, preferences.getScanPeriod(), manager,

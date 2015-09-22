@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-8f483672248a3b064dd1296426bbd883036d3dac.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c5cafb324568d954780abb858c25db7ce675ab3c">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-1ad824814c082103c641e46b78497e364892f900.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-edc7c15584ba1ccf7936a4c558958c35cad2976e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="98137c4d12c50923f5809852b1ef4d1c4e162081">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-026a59eb44feae6b1298649be20c326e2d748ad4.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="166e458ee3b5fb5fcff0f936df3f3a788e6c54f3">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-ef824093ac4ee2954fd6dbb231d4ba31746f60b2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e23ea11124bb700eeddd4ab7aa848c615f493850">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-e7991edfe9867bedf3332c45d42eee2b18301279.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="77a9dcb5f8b1dba36aacaa9c150eb0942dbea158">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-725dcf269c5c29d3fd14571c140914d4b5183217.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-acf2c13493822ace1705eccd1cdc8d736ae88c7e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-912653a55e823bf050df28499600d86cc5814d7b.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="cb6fab7a71fa9ec1f483d44c5fca65ab469d8aca">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-d7841d5f1a19fe14f4059e157357316adc8868cb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2e24e5f1b11170163028277de63f709e42525db4">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-1de5c3f453d17cb8bef9ea331cf4651690e2cc1d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appstate\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="edea92852b40eee716e910af8dad9eeaa58fb0e1">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-30e63d6780fec741da878204d7022098e180f08b.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-574468e91c8051665a1a8bc75edafc3b3617374d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6e85edfc9b5346d216e50ccef1f8e825504144a3">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-d945b2a12b465e817f0e1126cb5e48919d75f721.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.0-d0399a5a1516447d6ece26a781d5f1ad5228beaf.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="adebe28e0c0c05d34a3bfd76f3275bf4d8ff87b6">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-2f8d85de4caeb80a6ac06257e7c7e2280bfdb630.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0124ce31248c0e8acfa2b28283c6d1a4d76e73d2">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-9dcb1058665736902eb669666cfb8c8c67a640d5.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c2ac04c5b232f6f0658ee4f1c13be09cd76406e2">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-6c6b5b1c58d135b78449571a667595b20094f1a7.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-vision\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b99f0b78bbcb76b915bc6529a83b65d4d46990dd">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-ac4ccca2115246b26984d5476a58e81d3479b00e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="2491ae1b2a848af1f4f0c795f3117c1bd6a1989f">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-a16cfc89d90762e05395bbdf0391688c9b9b5e69.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ff30fa49c07a08c3035d7218a3efebf5680d522">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-2ce61a0bb6f284adf73ad7baa414c1da85052266.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c756d14e99d39471e99013a1e8fd2f3813ed42bf">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-f404c7572510b802ab290a6bec1302b3dfc69ada.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.0-53f1cad328f5f1aae47f87fadb22c0cce02445ec.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\libs\poj-countdowntimer.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9511160090e718be352964e3ceeb58d5daf989ff">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\poj-countdowntimer-abf8396ca7c77feb07e2eee6171c894c03a0f0da.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="130b32ed466fa0f63efd4c7d6250ccd2ed506790">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-3ba15155882486f0ba894d3c1e0daf1b31591749.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d11330ea68c0d964d30d5caed1f27e6b1488b189">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-a6a802ce33ffdcde8f5b74c3d88be2c738001332.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4a135d56554069e5d0ff80e3220e887e57146ee5">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-fe24906c724dc69ff44d83adc61e24698be59fca.jar" />
+    </item>
+    <item
+        jar="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="42a1ee578b62fd1bd28b3307a679dc9ba0791587">
+        <dex dex="C:\Users\Ludgero\studio_workspace\FIND-Studio\app\build\intermediates\pre-dexed\debug\classes-7828f9ae439aa2690ef04162869087dd1b8137fd.jar" />
+    </item>
+
+</items>

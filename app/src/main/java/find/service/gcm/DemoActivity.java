@@ -3,6 +3,8 @@ package find.service.gcm;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import find.service.AndroidDatabaseManager;
 import find.service.R;
 import find.service.gcm.map.DownloadFile;
 import find.service.net.diogomarques.wifioppish.NodeIdentification;
@@ -11,10 +13,12 @@ import find.service.org.json.JSONArray;
 import find.service.org.json.JSONObject;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -26,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -111,6 +116,9 @@ public class DemoActivity extends Activity {
 	final static String PATH = Environment.getExternalStorageDirectory()
 			+ "/mapapp/world.sqlitedb";;
 
+	private BroadcastReceiver buttonReceiver;
+	private BroadcastReceiver stateReceiver;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,13 +139,64 @@ public class DemoActivity extends Activity {
 		regid = prefs.getString(SplashScreen.PROPERTY_REG_ID, "");
 		
 		//onStartUp();
-		
+
 		final SharedPreferences preferences = getApplicationContext()
 				.getSharedPreferences("Lost",
 						android.content.Context.MODE_PRIVATE);
 
+
+		buttonReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				boolean start = intent.getExtras().getBoolean("state");
+
+				if(start)
+					test.setVisibility(View.INVISIBLE);
+
+				serviceActivate.setText(start ? "Start service" : "Stop Service");
+				serviceActivate.setEnabled(true);
+			}
+		};
+
+		stateReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String state = intent.getExtras().getString("State");
+				Log.d(TAG, "Received Broadcast: state changed " + state);
+
+				TextView stateText = (TextView) findViewById(R.id.stateText);
+				stateText.setText(state);
+
+			}
+		};
+
 	}
-	
+
+	public void showDB(View v) {
+
+		Intent dbmanager = new Intent(this,AndroidDatabaseManager.class);
+		startActivity(dbmanager);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		LocalBroadcastManager.getInstance(this).registerReceiver((buttonReceiver),
+				new IntentFilter("changeButtonState")
+		);
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("stateChange");
+		registerReceiver(stateReceiver, filter);
+	}
+
+	@Override
+	protected void onStop() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(buttonReceiver);
+		unregisterReceiver(stateReceiver);
+		super.onStop();
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -180,6 +239,7 @@ public class DemoActivity extends Activity {
 			// the user to start/stop the service
 			test.setText("FIND Service requires internet connection to alter preferences "
 					+ "please connect via WIFI and restart the application");
+			test.setVisibility(View.VISIBLE);
 			Toast.makeText(getApplicationContext(),
 					"FIND Service Preferences requires internet connection",
 					Toast.LENGTH_LONG).show();
@@ -196,12 +256,13 @@ public class DemoActivity extends Activity {
 			// Checks if the BD responsible for the tiles exits, if not download
 			// the file from the server
 			// set the tile provider and database
+			/*
 			File bd = new File(Environment.getExternalStorageDirectory()
 					.toString() + "/mapapp/world.sqlitedb");
 
 			if (!bd.exists()) {
 				DownloadFile.downloadTileDB();
-			}
+			} */
 
 			final SharedPreferences preferences = getApplicationContext()
 					.getSharedPreferences("Lost",
@@ -214,7 +275,7 @@ public class DemoActivity extends Activity {
 
 			// gets mac_address (user identification)
 			address = info.getMacAddress();
-			address = NodeIdentification.getNodeId(address);
+			//address = NodeIdentification.getNodeId(address);
 
 
 			// registers user for simulation if intent equals
@@ -292,6 +353,7 @@ public class DemoActivity extends Activity {
 				ui.post(new Runnable() {
 					public void run() {
 						test.setText(R.string.noSimulations);
+						test.setVisibility(View.VISIBLE);
 						state_associated = false;
 					}
 				});
@@ -312,7 +374,7 @@ public class DemoActivity extends Activity {
 				HttpGet httpGet;
 
 				httpGet = new HttpGet(
-						"http://accessible-serv.lasige.di.fc.ul.pt/~lost/index.php/rest/simulations");
+						"http://accessible-serv.lasige.di.fc.ul.pt/~lost/LostMap/index.php/rest/simulations");
 
 				try {
 					HttpResponse response = client.execute(httpGet);
@@ -378,6 +440,7 @@ public class DemoActivity extends Activity {
 	private void stop() {
 		serviceActivate.setText("Stopping service");
 		test.setText("Waiting for internet connection to sync files");
+		test.setVisibility(View.VISIBLE);
 		associate.setEnabled(false);
 		state_associated = false;
 		associationStatus.setEnabled(false);
@@ -394,7 +457,6 @@ public class DemoActivity extends Activity {
 			Simulation.regSimulationContentProvider("", "", "", "", context);
 		}
 		LOSTService.stop(context);
-
 	}
 
 	

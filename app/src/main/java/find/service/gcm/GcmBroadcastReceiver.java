@@ -78,9 +78,10 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 
 		// get data from push notification
 		type = intent.getExtras().getString("type");
-		String mode= intent.getExtras().getString("mode");
+		String mode = intent.getExtras().getString("mode");
 
 		Log.d(TAG, "Type:" + type);
+		Log.d(TAG, "GCM - Mode:" + mode);
 
 		// if received stop notification start the stopping service
 		try {
@@ -111,6 +112,11 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 		// received new simulation notification, getting parameters
 		name = intent.getExtras().getString("name");
 		date = intent.getExtras().getString("date");
+
+		// bad code incoming:
+		if(intent.getExtras().getString("latS") == null)
+			return;
+
 		latS = Double.parseDouble(intent.getExtras().getString("latS"));
 		lonS = Double.parseDouble(intent.getExtras().getString("lonS"));
 		latE = Double.parseDouble(intent.getExtras().getString("latE"));
