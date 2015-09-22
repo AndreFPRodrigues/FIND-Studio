@@ -43,7 +43,7 @@ public class AssociationActivity extends Activity {
 		//TODO only convert duration once
 		long dur =Long.parseLong(duration); 
 		Log.d(TAG,"Duration:" +duration );
-		Simulation.preDownloadTiles(latS, lonS, latE, lonE, c);
+		//Simulation.preDownloadTiles(latS, lonS, latE, lonE, c);
 		ScheduleService.setStartAlarm(date,duration, c);
 		Intent disassociate = new Intent(this, AssociationActivity.class);
 		disassociate.setAction("disassociate");

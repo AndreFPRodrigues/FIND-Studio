@@ -54,9 +54,9 @@ public class RequestServer {
 	public static final String SERVER = "server";
 	public static final String MODE = "mode";
 
-	public static String endpoint = "http://accessible-serv.lasige.di.fc.ul.pt/~lost/";
+	public static String endpoint = "http://accessible-serv.lasige.di.fc.ul.pt/~lost/LostMap/";
 	private static String postCoordinates = "index.php/rest/victims";
-	private static String postLogFile = "http://accessible-serv.lasige.di.fc.ul.pt/~lost/log/upload.php";
+	private static String postLogFile = endpoint + "log/upload.php";
 
 	private static String TAG = "gcm";
 
@@ -201,7 +201,7 @@ public class RequestServer {
 							JSONArray serverArray = new JSONArray(
 									builder.get(0));
 							JSONObject serverUrl = serverArray.getJSONObject(0);
-							endpoint = serverUrl.getString("url");
+							endpoint = serverUrl.getString("url") + "LostMap/";
 							mode= serverUrl.getString("mode");
 							SharedPreferences.Editor editor = prefs.edit();
 							editor.putString(SERVER, endpoint);
@@ -334,9 +334,12 @@ public class RequestServer {
 		}.execute(null, null, null);
 	}
 
-	public static void uploadLogFile(final String nodeid) {
+	public static void uploadLogFile(final String address) {
 		new Thread(new Runnable() {
 			public void run() {
+
+				String nodeid = address.replace(":", "");
+
 				String fileName = "logcat_FIND.txt";
 				String filePath = Environment.getExternalStorageDirectory()
 						+ "/";

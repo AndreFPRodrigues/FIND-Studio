@@ -113,6 +113,7 @@ public class AndroidNetworkingFacade implements INetworkingFacade {
 	public void stopAccessPoint() {
 		mUdp.releaseBroadcastSocket();
 		mSoftAP.stopWifiAP(this);
+		mWiFi.safeUnregisterReceiver(mWiFi.getScanReceiver());
 	}
 
 	/**

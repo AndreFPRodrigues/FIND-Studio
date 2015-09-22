@@ -115,7 +115,9 @@ public class StateInternetConn extends AState {
 
 					long statusTime = System.currentTimeMillis();
 					m.setStatus(MessagesProvider.REC_CC, statusTime);
-					
+					environment.updateMessage(m);
+
+					/*
 					// update content provider to tell messages were sucessfully
 					// sent to webservice
 					ContentValues cv = new ContentValues();
@@ -125,7 +127,7 @@ public class StateInternetConn extends AState {
 							+ MessagesProvider.METHOD_SENT + "/"
 							+ m.getNodeId() + m.getTimestamp());
 					context.getContentResolver()
-							.update(sentUri, cv, null, null);
+							.update(sentUri, cv, null, null);*/
 				}
 
 				// environment.clearQueue();

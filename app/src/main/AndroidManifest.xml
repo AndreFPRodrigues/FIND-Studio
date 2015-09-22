@@ -67,6 +67,8 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
 
+        <activity android:name="find.service.AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light"/>
         <!--
           WakefulBroadcastReceiver that will receive intents from GCM
           services and hand them to the custom IntentService.

@@ -214,6 +214,10 @@ public class Message implements Serializable {
 	public String getMessage() {
 		return message;
 	}
+
+	public void setMessage(String text){
+		this.message = text;
+	}
 	
 	/**
 	 * Sets the status of this message and the time when the status changed

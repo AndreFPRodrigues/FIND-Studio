@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,6 +15,8 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+
+import java.util.ArrayList;
 
 /**
  * Content Provider to access {@link Message Messages} received and sent to
@@ -45,6 +48,20 @@ public class MessagesProvider extends ContentProvider {
 			+ "/*");
 	public static final int URI_SENT_ID_CODE = 8;
 
+	public static final String METHOD_INFO = "info";
+	public static final Uri URI_INFO = Uri.parse(PROVIDER_URL + METHOD_INFO);
+	public static final int URI_INFO_CODE = 13;
+	public static final Uri URI_INFO_ID = Uri.parse(PROVIDER_URL + METHOD_INFO
+			+ "/*");
+	public static final int URI_INFO_ID_CODE = 14;
+
+	public static final String METHOD_DATA = "data";
+	public static final Uri URI_DATA = Uri.parse(PROVIDER_URL + METHOD_DATA);
+	public static final int URI_DATA_CODE = 15;
+	public static final Uri URI_DATA_ID = Uri.parse(PROVIDER_URL + METHOD_DATA
+			+ "/*");
+	public static final int URI_DATA_ID_CODE = 16;
+
 	public static final String METHOD_CUSTOM = "customsend";
 	public static final Uri URI_CUSTOM = Uri
 			.parse(PROVIDER_URL + METHOD_CUSTOM);
@@ -68,34 +85,34 @@ public class MessagesProvider extends ContentProvider {
 	public static final Uri URI_SIMULATION_CUSTOM = Uri.parse(PROVIDER_URL
 			+ METHOD_SIMULATION + "/*");
 	public static final int URI_SIMULATION_CUSTOM_CODE = 10;
-	
-	
+
+
 	public static final String METHOD_TRUNCATE = "truncate";
 	public static final Uri URI_TRUNCATE= Uri
 			.parse(PROVIDER_URL + METHOD_TRUNCATE);
 	public static final int URI_TRUNCATE_CODE = 11;
 
-	
+
 
 
 	// database fields - identification
 	public static final String COL_ID = "_id";
-	public static final String COL_NODE = "nodeid";
+	public static final String COL_NODE = "sender_mac";
 	public static final String COL_GOOGLE = "google_account";
-	public static final String COL_TIME = "timestamp";
-	
+	public static final String COL_TIME = "tempo_geracao";
+
 	// database fields - sensor data - location
 	public static final String COL_LAT = "latitude";
 	public static final String COL_LON = "longitude";
-	public static final String COL_ACC = "accuracy";
-	public static final String COL_LOC_TIME = "location_timestamp";
-	
+	public static final String COL_ACC = "precisao";
+	public static final String COL_LOC_TIME = "tempo_coordenadas";
+
 	// database fields - sensors data - other
 	public static final String COL_BATTERY = "battery";
-	public static final String COL_STEPS = "steps";
 	public static final String COL_SCREEN = "screen";
+	public static final String COL_STEPS = "steps";
 	public static final String COL_SAFE = "safe";
-	
+
 	// database fields - info
 	public static final String COL_MSG = "message";
 	public static final String COL_ADDED = "added";
@@ -104,13 +121,13 @@ public class MessagesProvider extends ContentProvider {
 	public static final String COL_ORIGIN = "origin";
 	public static final String COL_STATUSKEY = "statuskey";
 	public static final String COL_STATUSVALUE = "statusvalue";
-	
+
 	// database fields - info - target messaging
 	public static final String COL_TARGET = "target";
 	public static final String COL_TAR_LAT = "tartet_latitude";
 	public static final String COL_TAR_LON = "target_longitude";
 	public static final String COL_TAR_RAD = "target_radius";
-	
+
 	// database fields - simulation
 	public static final String COL_SIMUKEY = "simukey";
 	public static final String COL_SIMUVALUE = "simuvalue";
@@ -124,7 +141,7 @@ public class MessagesProvider extends ContentProvider {
 	public static final String REC_VIC = "receivedVictim";
 	public static final String REC_RES = "receivedRescuer";
 	public static final String REC_CC = "receivedControlCentre";
-	
+
 	// contants - message origin & target message
 	public static final String VICTIM = "victim";
 	public static final String RESCUER = "rescuer";
@@ -134,10 +151,13 @@ public class MessagesProvider extends ContentProvider {
 	static final UriMatcher uriMatcher;
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+		uriMatcher.addURI(PROVIDER, METHOD_INFO, URI_INFO_CODE);
+		uriMatcher.addURI(PROVIDER, METHOD_DATA, URI_DATA_CODE);
+
 		uriMatcher.addURI(PROVIDER, METHOD_RECEIVED, URI_RECEIVED_CODE);
 		uriMatcher.addURI(PROVIDER, METHOD_SENT, URI_SENT_CODE);
 		uriMatcher.addURI(PROVIDER, METHOD_CUSTOM, URI_CUSTOM_CODE);
-		
+
 		uriMatcher.addURI(PROVIDER, METHOD_CUSTOM + "/#", URI_CUSTOM_ID_CODE);
 		uriMatcher.addURI(PROVIDER, METHOD_RECEIVED + "/*",
 				URI_RECEIVED_ID_CODE);
@@ -155,14 +175,42 @@ public class MessagesProvider extends ContentProvider {
 	// database declarations
 	private SQLiteDatabase database;
 	static final String DATABASE_NAME = "LOSTMessages";
-	static final String TABLE_OUTGOING = "outgoing";
-	static final String TABLE_INCOMING = "incoming";
+	static final String TABLE_UNIT_INFO = "unit_info";
+	static final String TABLE_UNIT_DATA = "unit_data";
+	/*static final String TABLE_OUTGOING = "outgoing";
+	static final String TABLE_INCOMING = "incoming";*/
 	static final String TABLE_TOSEND = "tosend";
 	static final String TABLE_STATUS = "status";
 	static final String TABLE_SIMULATION = "simulation";
 
 	static final int DATABASE_VERSION = 2;
-	private static final String TABLE = " (" + COL_ID + " TEXT PRIMARY KEY, "
+
+	private static final String CREATE_TABLE_UNIT_INFO = "CREATE TABLE unit_info (\n" +
+			"  sender_mac varchar(100) NOT NULL DEFAULT '',\n" +
+			"  google_account TEXT, \n" +
+			"  tempo_geracao datetime NOT NULL,\n" +
+			"  tempo_rececao datetime DEFAULT NULL,\n" +
+			"  tempo_coordenadas datetime DEFAULT NULL,\n" +
+			"  latitude float DEFAULT NULL,\n" +
+			"  longitude float DEFAULT NULL,\n" +
+			"  precisao int(11) DEFAULT NULL,\n" +
+			"  prioridade varchar(10) DEFAULT NULL,\n" +
+			"  safe tinyint(4) DEFAULT NULL,\n" +
+			"  origin TEXT, \n" +
+			"  status TEXT DEFAULT NULL, \n" +
+			"  PRIMARY KEY (sender_mac,tempo_geracao)\n" +
+			")";
+
+	private static final String CREATE_TABLE_UNIT_DATA = "CREATE TABLE unit_data (\n" +
+			"  sender_mac varchar(100) NOT NULL DEFAULT '',\n" +
+			"  tempo_geracao datetime NOT NULL,\n" +
+			"  valor varchar(200) DEFAULT NULL,\n" +
+			"  tipo varchar(30) NOT NULL DEFAULT '',\n" +
+			"  PRIMARY KEY (sender_mac, tempo_geracao, tipo),\n" +
+			"  CONSTRAINT fk_testing FOREIGN KEY (tempo_geracao) REFERENCES unit_info (tempo_geracao) \n" +
+			")";
+
+	/*private static final String TABLE = " (" + COL_ID + " TEXT PRIMARY KEY, "
 			+ " " + COL_NODE + " TEXT," + " " + COL_GOOGLE + " TEXT," + " "
 			+ COL_TIME + " DOUBLE," + " " + COL_LAT + " DOUBLE," + " "
 			+ COL_LON + " DOUBLE," + " " + COL_ACC + " INTEGER," + " "
@@ -176,7 +224,7 @@ public class MessagesProvider extends ContentProvider {
 	static final String CREATE_TABLE_OUTGOING = " CREATE TABLE "
 			+ TABLE_OUTGOING + TABLE;
 	static final String CREATE_TABLE_INCOMING = " CREATE TABLE "
-			+ TABLE_INCOMING + TABLE;
+			+ TABLE_INCOMING + TABLE;*/
 	static final String CREATE_TABLE_TOSEND = " CREATE TABLE " + TABLE_TOSEND
 			+ " (customMessage TEXT PRIMARY KEY);";
 	static final String CREATE_TABLE_STATUS = " CREATE TABLE " + TABLE_STATUS
@@ -188,7 +236,7 @@ public class MessagesProvider extends ContentProvider {
 			+ COL_SIMU_DURATION + " TEXT, " + COL_SIMU_LOCAL + " TEXT" + ")";
 
 	// class that creates and manages the provider's database
-	private static class DBHelper extends SQLiteOpenHelper {
+	public static class DBHelper extends SQLiteOpenHelper {
 
 		public DBHelper(Context context) {
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -196,8 +244,10 @@ public class MessagesProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			db.execSQL(CREATE_TABLE_INCOMING);
-			db.execSQL(CREATE_TABLE_OUTGOING);
+			db.execSQL(CREATE_TABLE_UNIT_INFO);
+			db.execSQL(CREATE_TABLE_UNIT_DATA);
+			/*db.execSQL(CREATE_TABLE_INCOMING);
+			db.execSQL(CREATE_TABLE_OUTGOING);*/
 			db.execSQL(CREATE_TABLE_TOSEND);
 			db.execSQL(CREATE_TABLE_STATUS);
 			db.execSQL(CREATE_TABLE_SIMULATION);
@@ -209,13 +259,65 @@ public class MessagesProvider extends ContentProvider {
 			Log.i(TAG, "Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ". Old data will be destroyed.");
 
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_INCOMING);
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_OUTGOING);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNIT_INFO);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNIT_DATA);
+			/*db.execSQL("DROP TABLE IF EXISTS " + TABLE_INCOMING);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_OUTGOING);*/
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOSEND);
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATUS);
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_SIMULATION);
 
 			onCreate(db);
+		}
+
+		public ArrayList<Cursor> getData(String Query){
+			//get writable database
+			SQLiteDatabase sqlDB = getWritableDatabase();
+			String[] columns = new String[] { "mesage" };
+			//an array list of cursor to save two cursors one has results from the query
+			//other cursor stores error message if any errors are triggered
+			ArrayList<Cursor> alc = new ArrayList<Cursor>(2);
+			MatrixCursor Cursor2= new MatrixCursor(columns);
+			alc.add(null);
+			alc.add(null);
+
+
+			try{
+				String maxQuery = Query ;
+				//execute the query results will be save in Cursor c
+				Cursor c = sqlDB.rawQuery(maxQuery, null);
+
+
+				//add value to cursor2
+				Cursor2.addRow(new Object[] { "Success" });
+
+				alc.set(1,Cursor2);
+				if (null != c && c.getCount() > 0) {
+
+
+					alc.set(0,c);
+					c.moveToFirst();
+
+					return alc ;
+				}
+				return alc;
+			} catch(SQLException sqlEx){
+				Log.d("printing exception", sqlEx.getMessage());
+				//if any exceptions are triggered save the error message to cursor an return the arraylist
+				Cursor2.addRow(new Object[] { ""+sqlEx.getMessage() });
+				alc.set(1,Cursor2);
+				return alc;
+			} catch(Exception ex){
+
+				Log.d("printing exception", ex.getMessage());
+
+				//if any exceptions are triggered save the error message to cursor an return the arraylist
+				Cursor2.addRow(new Object[] { ""+ex.getMessage() });
+				alc.set(1,Cursor2);
+				return alc;
+			}
+
+
 		}
 
 	}
@@ -239,18 +341,26 @@ public class MessagesProvider extends ContentProvider {
 
 		try {
 			switch (uriMatcher.match(uri)) {
+			case URI_INFO_CODE:
+				row = database.insertOrThrow(TABLE_UNIT_INFO, "", values);
+				break;
+
+			case URI_DATA_CODE:
+				row = database.insertOrThrow(TABLE_UNIT_DATA, "", values);
+				break;
+
 			case URI_CUSTOM_CODE:
 				row = database.insertOrThrow(TABLE_TOSEND, "", values);
 				break;
 
-			case URI_RECEIVED_CODE:
+			/*case URI_RECEIVED_CODE:
 				row = database.insertOrThrow(TABLE_INCOMING, "", values);
 				received = true;
 				break;
 
 			case URI_SENT_CODE:
 				row = database.insertOrThrow(TABLE_OUTGOING, "", values);
-				break;
+				break;*/
 
 			case URI_STATUS_CODE:
 				try {
@@ -279,7 +389,7 @@ public class MessagesProvider extends ContentProvider {
 				}
 				break;
 			case URI_TRUNCATE_CODE:
-				
+
 				break;
 			}
 		} catch (SQLException e) {
@@ -322,7 +432,7 @@ public class MessagesProvider extends ContentProvider {
 
 		// select correct table based on URI
 		switch (uriMatcher.match(uri)) {
-		case URI_RECEIVED_CODE:
+		/*case URI_RECEIVED_CODE:
 			queryBuilder.setTables(TABLE_INCOMING);
 			break;
 
@@ -340,6 +450,14 @@ public class MessagesProvider extends ContentProvider {
 			queryBuilder.setTables(TABLE_OUTGOING);
 			String sentId = uri.getLastPathSegment();
 			queryBuilder.appendWhere("_id = " + sentId);
+			break;*/
+
+		case URI_INFO_CODE:
+			queryBuilder.setTables(TABLE_UNIT_INFO);
+			break;
+
+		case URI_DATA_CODE:
+			queryBuilder.setTables(TABLE_UNIT_DATA);
 			break;
 
 		case URI_CUSTOM_CODE:
@@ -372,7 +490,7 @@ public class MessagesProvider extends ContentProvider {
 			queryBuilder.appendWhere(COL_SIMUKEY + "=\"" + key2 + "\"");
 			break;
 		case URI_TRUNCATE_CODE:
-		
+
 			break;
 
 		default:
@@ -393,7 +511,15 @@ public class MessagesProvider extends ContentProvider {
 
 		switch (uriMatcher.match(uri)) {
 
-		case URI_SENT_ID_CODE:
+		case URI_INFO_CODE:
+			rows = database.update(TABLE_UNIT_INFO, values, selection,
+					selectionArgs);
+			if (rows > 0) {
+				Log.i(TAG, "Generating notification for " + uri);
+				getContext().getContentResolver().notifyChange(uri, null);
+			}
+			break;
+		/*case URI_SENT_ID_CODE:
 			String id = uri.getLastPathSegment();
 			selection = "_id = \"" + id + "\"";
 			rows = database.update(TABLE_OUTGOING, values, selection,
@@ -402,7 +528,7 @@ public class MessagesProvider extends ContentProvider {
 				Log.i(TAG, "Generating notification for " + uri);
 				getContext().getContentResolver().notifyChange(uri, null);
 			}
-			break;
+			break;*/
 
 		case URI_STATUS_CODE:
 			rows = database.update(TABLE_STATUS, values, selection,
@@ -442,12 +568,14 @@ public class MessagesProvider extends ContentProvider {
 					"rowid = "
 							+ id
 							+ (!TextUtils.isEmpty(selection) ? " AND ("
-									+ selection + ')' : ""), selectionArgs);
+							+ selection + ')' : ""), selectionArgs);
 		case URI_TRUNCATE_CODE:
-			database.execSQL("delete from "+ TABLE_OUTGOING);
-			database.execSQL("delete from "+ TABLE_INCOMING);
+			//database.execSQL("delete from "+ TABLE_OUTGOING);
+			//database.execSQL("delete from "+ TABLE_INCOMING);
+			database.execSQL("delete from "+ TABLE_UNIT_INFO);
+			database.execSQL("delete from "+ TABLE_UNIT_DATA);
 			database.execSQL("delete from "+ TABLE_TOSEND);
-	
+
 
 			break;
 		}
@@ -463,5 +591,4 @@ public class MessagesProvider extends ContentProvider {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

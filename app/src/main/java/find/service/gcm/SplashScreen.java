@@ -10,6 +10,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import find.service.AndroidDatabaseManager;
 import find.service.R;
 import find.service.gcm.map.DownloadFile;
 import find.service.net.diogomarques.wifioppish.NodeIdentification;
@@ -29,6 +30,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -78,7 +81,7 @@ public class SplashScreen extends Activity {
 
 		// gets mac_address (user identification)
 		address = info.getMacAddress();
-		address = NodeIdentification.getNodeId(address);
+		//address = NodeIdentification.getNodeId(address);
 
 		// check if registered
 		if (checkIfRegistered()) {
@@ -133,20 +136,21 @@ public class SplashScreen extends Activity {
 					// Checks if the BD responsible for the tiles exits, if not
 					// download the file from the server
 					// set the tile provider and database
+					/*
 					File bd = new File(Environment
 							.getExternalStorageDirectory().toString()
 							+ "/mapapp/world.sqlitedb");
 
 					if (!bd.exists()) {
 						DownloadFile.downloadTileDB();
-					}
+					} */
 
 					WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 					WifiInfo info = manager.getConnectionInfo();
 
 					// gets mac_address (user identification)
 					address = info.getMacAddress();
-					address = NodeIdentification.getNodeId(address);
+					//address = NodeIdentification.getNodeId(address);
 
 					// has network, register and go to demoActivity
 

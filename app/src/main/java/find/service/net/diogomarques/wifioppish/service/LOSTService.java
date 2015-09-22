@@ -30,7 +30,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Button;
 
 /**
  * Represents the service that runs on foreground. It uses the LOST-OppNet
@@ -66,9 +68,12 @@ public class LOSTService extends Service {
 	private static boolean isLogging = false;
 	private static final int MESSAGE_RATE = 30000;
 
+	private static LocalBroadcastManager buttonBroadcaster;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		buttonBroadcaster = LocalBroadcastManager.getInstance(this);
 		Log.i(TAG, "Service created");
 	}
 
@@ -133,6 +138,11 @@ public class LOSTService extends Service {
 		boolean forceExit = environment.getPreferences().isRunningLocally();
 		context.stopService(svcIntent);
 
+		// send a broadcast to change the button state
+		Intent buttonIntent = new Intent("changeButtonState");
+		buttonIntent.putExtra("state", true);
+		buttonBroadcaster.sendBroadcast(buttonIntent);
+
 		Log.d(TAG, "Correctly synced and terminated service");
 		if (forceExit)
 			System.exit(0);
@@ -143,6 +153,11 @@ public class LOSTService extends Service {
 	 * Starts the business logic to create an opportunistic network
 	 */
 	private void processStart() {
+		// send a broadcast to change the button state
+		Intent buttonIntent = new Intent("changeButtonState");
+		buttonIntent.putExtra("state", false);
+		buttonBroadcaster.sendBroadcast(buttonIntent);
+
 		new AsyncTask<Void, Void, Void>() {
 
 			@Override

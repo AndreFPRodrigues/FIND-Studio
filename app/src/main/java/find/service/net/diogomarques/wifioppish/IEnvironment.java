@@ -133,12 +133,13 @@ public interface IEnvironment {
 	 * @return Array of Messages to be sent
 	 */
 	public abstract List<Message> fetchMessagesFromQueue();
-	
+
+
 	/**
 	 * Checks of the queue has messages
 	 * @return True if queue has messages, false otherwise
 	 */
-	public abstract boolean hasMessages();
+	//public abstract boolean hasMessages();
 	
 	/**
 	 * Updates the statistics of sent and received network messages
@@ -174,14 +175,14 @@ public interface IEnvironment {
 	/**
 	 * Empties the sending queue
 	 */
-	public abstract void clearQueue();
+	//public abstract void clearQueue();
 
 	/**
 	 * Removes a single message from the sending queue
 	 * @param msg Message to be removed
 	 * @return True if the message was removed; False otherwise.
 	 */
-	public abstract boolean removeFromQueue(Message msg);
+	//public abstract boolean removeFromQueue(Message msg);
 
 	/**
 	 * Marks the victim as safe or not. The Messages will reflect this change. 
@@ -215,4 +216,8 @@ public interface IEnvironment {
 	 * @param listener
 	 */
 	public void currentListener(IListener listener);
+
+	public void updateMessage(Message msg);
+
+	public void onServiceStopped();
 }

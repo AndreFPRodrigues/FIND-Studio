@@ -68,19 +68,7 @@ public class StateStation extends AState {
 							long statusTime = System.currentTimeMillis();
 							msg.setStatus(MessagesProvider.SENT, statusTime);
 
-							// indicate that message was sent in content
-							// provider
-							ContentValues cv = new ContentValues();
-							cv.put(MessagesProvider.COL_STATUS,
-									MessagesProvider.SENT);
-							cv.put(MessagesProvider.COL_STATUS_TIME, statusTime);
-							Uri sentUri = Uri
-									.parse(MessagesProvider.PROVIDER_URL
-											+ MessagesProvider.METHOD_SENT
-											+ "/" + msg.getNodeId()
-											+ msg.getTimestamp());
-							context.getContentResolver().update(sentUri, cv,
-									null, null);
+							environment.updateMessage(msg);
 
 							environment
 									.deliverMessage("message successfully sent");

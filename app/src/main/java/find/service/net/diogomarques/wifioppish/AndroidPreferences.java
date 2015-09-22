@@ -213,10 +213,6 @@ public class AndroidPreferences implements IDomainPreferences {
 		String mode = prefs.getString(RequestServer.MODE, "LOCAL");
 		Log.d("gcm", "Mode: " +mode);
 
-		if(mode.equals("LOCAL"))
-			return true;
-		else{
-			return false;
-		}
+		return mode.equals("LOCAL");
 	}
 }

@@ -52,6 +52,13 @@
             android:text="@string/noSimulations"
             android:visibility="gone" />
 
+        <Button
+            android:id="@+id/db"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showDB"
+            android:text="showDB" />
+
         <!--
             <Button
             android:id="@+id/dissassociate"
@@ -120,6 +127,28 @@
             android:checked="true"
             android:text="Allow to store anonymous simulation data" />
         -->
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Current State: "
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/stateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="None" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
