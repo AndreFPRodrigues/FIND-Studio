@@ -29,6 +29,11 @@ import android.os.Handler;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * This {@code WakefulBroadcastReceiver} takes care of creating and managing a
  * partial wake lock for your app. It passes off the work of processing the GCM
@@ -112,6 +117,22 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
 		// received new simulation notification, getting parameters
 		name = intent.getExtras().getString("name");
 		date = intent.getExtras().getString("date");
+		long duration = Long.parseLong(intent.getExtras().getString("duration"));
+		long durationInMillis = duration * 60 * 1000;
+
+		// check if the simulation has already ended
+		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		try {
+			Date dateFor = formatter.parse(date);
+			Log.d(TAG, "date in milliseconds: " + dateFor.getTime());
+
+			if(System.currentTimeMillis() > dateFor.getTime() + durationInMillis) {
+				Log.d(TAG, "The simulation has already ended");
+				return;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		// bad code incoming:
 		if(intent.getExtras().getString("latS") == null)

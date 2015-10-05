@@ -259,4 +259,8 @@ public class LOSTService extends Service {
 		}
 	}
 
+	public static String getCurrentState() {
+		return environment == null ? "None" : environment.getCurrentState().toString();
+	}
+
 }
