@@ -69,6 +69,7 @@ public class SplashScreen extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(TAG, "started Splash Screen");
 
 		context = getApplicationContext();
 		setContentView(R.layout.activity_splash);
@@ -94,7 +95,7 @@ public class SplashScreen extends Activity {
 
 			
 			// RequestServer.register(address, regid, account);
-			RequestServer.uploadLogFile(address);
+			new RequestServer().uploadLogFile(address, true, false);
 			
 
 			Intent i = new Intent(SplashScreen.this, DemoActivity.class);

@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import net.diogomarques.utils.CountDownTimer;
+
 import find.service.gcm.RequestServer;
 import find.service.net.diogomarques.wifioppish.IEnvironment.State;
 import find.service.net.diogomarques.wifioppish.networking.Message;
@@ -32,123 +34,147 @@ import android.util.Log;
 
 /**
  * Android implementation of state {@link IEnvironment.State#InternetConn}
- * 
+ *
  * @author André Rodrigues
  * @author André Silva <asilva@lasige.di.fc.ul.pt>
  */
 public class StateInternetConn extends AState {
 
-	private final int HTTP_OK = 200;
-	private final String METHOD = "victims";
+    private final int HTTP_OK = 200;
+    private final String METHOD = "victims";
 
-	/**
-	 * Creates a new InternetConnected state
-	 * 
-	 * @param environment
-	 *            Environment running the state machine
-	 */
-	public StateInternetConn(IEnvironment env) {
-		super(env);
-	}
+    /**
+     * Creates a new InternetConnected state
+     *
+     * @param environment Environment running the state machine
+     */
+    public StateInternetConn(IEnvironment env) {
+        super(env);
+    }
 
-	@Override
-	public void start(int timeout, Context c) {
+    @Override
+    public void start(int timeout, Context c) {
 
-		Log.w("Machine State", "Internet Connected");
+        boolean success = false;
 
-		context = c;
-		environment.deliverMessage("entered Internet connected state");
-		environment.currentListener(null);
+        Log.w("Machine State", "Internet Connected");
 
-		long startTime = new Date().getTime();
-		if (LOSTService.toStop) {
-			RequestServer.uploadLogFile(NodeIdentification.getMyNodeId(c));
-		}
-		try {
-			String endpoint;
-			endpoint = new StringBuilder()
-					.append(environment.getPreferences().getApiEndpoint()).append("index.php/rest/")
-					.append(METHOD).toString();
-			if (LOSTService.toStop) {
-				endpoint += "/legacy";
-			}
-			Log.d("Webservice", "Endpoint: " + endpoint);
+        context = c;
+        environment.deliverMessage("entered Internet connected state");
+        environment.currentListener(null);
 
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(endpoint);
+        long startTime = new Date().getTime();
 
-			// get messages from send queue and create auto-message
-			List<Message> messages = environment.fetchMessagesFromQueue();
-			// messages.add(environment.createTextMessage(""));
-			JSONArray jsonArray = new JSONArray();
+        try {
+            String endpoint;
+            endpoint = new StringBuilder()
+                    .append(environment.getPreferences().getApiEndpoint()).append("index.php/rest/")
+                    .append(METHOD).toString();
+            if (LOSTService.toStop) {
+                endpoint += "/legacy";
+            }
+            Log.d("Webservice", "Endpoint: " + endpoint);
 
-			for (Message m : messages) {
-				JSONObject json = MessageFormatter.messageToJsonObject(m);
-				jsonArray.put(json);
-			}
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(endpoint);
 
-			String contents = jsonArray.toString();
+            // get messages from send queue and create auto-message
+            List<Message> messages = environment.fetchMessagesFromQueue();
+            // messages.add(environment.createTextMessage(""));
 
-			Log.d("Webservice", "About to send: " + contents);
 
-			// send request to webservice
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			nameValuePairs.add(new BasicNameValuePair("data", contents));
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			String body = EntityUtils.toString(entity, "UTF-8");
+            if (!messages.isEmpty()) {
 
-			Log.d("Webservice", "Response: "
-					+ response.getStatusLine().getStatusCode());
-			Log.d("Webservice", "Response body: " + body);
+                JSONArray jsonArray = new JSONArray();
 
-			// if messages were successfully inserted, clear the queue
-			if (response.getStatusLine().getStatusCode() == HTTP_OK) {
-				// message sent feedback
-				ContentResolver cr = context.getContentResolver();
+                for (Message m : messages) {
+                    JSONObject json = MessageFormatter.messageToJsonObject(m);
+                    jsonArray.put(json);
+                }
 
-				for (Message m : messages) {
-					// TODO get operation code (805) from shared/centralized
-					// handler
-					environment.deliverCustomMessage(m, 805);
+                String contents = jsonArray.toString();
 
-					long statusTime = System.currentTimeMillis();
-					m.setStatus(MessagesProvider.REC_CC, statusTime);
-					environment.updateMessage(m);
+                Log.d("Webservice", "About to send: " + contents);
 
-					/*
-					// update content provider to tell messages were sucessfully
-					// sent to webservice
-					ContentValues cv = new ContentValues();
-					cv.put(MessagesProvider.COL_STATUS, MessagesProvider.REC_CC);
-					cv.put(MessagesProvider.COL_STATUS_TIME, statusTime);
-					Uri sentUri = Uri.parse(MessagesProvider.PROVIDER_URL
-							+ MessagesProvider.METHOD_SENT + "/"
-							+ m.getNodeId() + m.getTimestamp());
-					context.getContentResolver()
-							.update(sentUri, cv, null, null);*/
-				}
+                // send request to webservice
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("data", contents));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity entity = response.getEntity();
+                String body = EntityUtils.toString(entity, "UTF-8");
 
-				// environment.clearQueue();
-			}
+                Log.d("Webservice", "Response: "
+                        + response.getStatusLine().getStatusCode());
+                Log.d("Webservice", "Response body: " + body);
 
-		} catch (IOException e) {
-			Log.e("Webservice",
-					"Cannot connect to webservice: " + e.getMessage(), e);
-		}
+                // if messages were successfully inserted, clear the queue
+                if (response.getStatusLine().getStatusCode() == HTTP_OK) {
+                    success = true;
 
-		// wait until time limit reached before changing state
-		while (new Date().getTime() < startTime + timeout)
-			;
-		environment.deliverMessage("t_i_con timeout");
+                    // message sent feedback
+                    ContentResolver cr = context.getContentResolver();
 
-		if (LOSTService.toStop) {
-			LOSTService.synced = true;
-			environment.gotoState(State.Stopped);
-		} else {
-			environment.gotoState(State.Scanning);
-		}
-	}
+                    for (Message m : messages) {
+                        // TODO get operation code (805) from shared/centralized
+                        // handler
+                        environment.deliverCustomMessage(m, 805);
+
+                        long statusTime = System.currentTimeMillis();
+                        m.setStatus(MessagesProvider.REC_CC, statusTime);
+                        environment.updateMessage(m);
+
+						/*
+                        // update content provider to tell messages were sucessfully
+						// sent to webservice
+						ContentValues cv = new ContentValues();
+						cv.put(MessagesProvider.COL_STATUS, MessagesProvider.REC_CC);
+						cv.put(MessagesProvider.COL_STATUS_TIME, statusTime);
+						Uri sentUri = Uri.parse(MessagesProvider.PROVIDER_URL
+								+ MessagesProvider.METHOD_SENT + "/"
+								+ m.getNodeId() + m.getTimestamp());
+						context.getContentResolver()
+								.update(sentUri, cv, null, null);*/
+                    }
+
+                    // environment.clearQueue();
+                }
+            } else {
+                Log.i("Webservice", "No messages to send");
+            }
+
+        } catch (IOException e) {
+            Log.e("Webservice",
+                    "Cannot connect to webservice: " + e.getMessage(), e);
+        }
+
+
+        if (LOSTService.toStop) {
+            new RequestServer().uploadLogFile(NodeIdentification.getMyNodeId(c), false, true);
+        }
+
+        long currTime = new Date().getTime();
+        long timeLeft = startTime + timeout - currTime;
+
+        if(timeLeft > 0){
+            try {
+                TimeUnit.MILLISECONDS.sleep(timeLeft);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        // wait until time limit reached before changing state
+        //while (new Date().getTime() < startTime + timeout)
+        //	;
+
+        environment.deliverMessage("t_i_con timeout");
+
+        if (success && LOSTService.toStop) {
+            LOSTService.synced = true;
+            environment.gotoState(State.Stopped);
+        } else {
+            environment.gotoState(State.Scanning);
+        }
+    }
 
 }

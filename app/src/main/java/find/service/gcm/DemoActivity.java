@@ -97,6 +97,7 @@ public class DemoActivity extends Activity {
 	private String location;
 	private String date;
 	private String duration;
+	private String currentState;
 
 	private Handler ui;
 	private Button associate;
@@ -125,7 +126,8 @@ public class DemoActivity extends Activity {
 		LOSTService.saveLogCat("create");
 
 		Log.d(TAG, "started demoactivity");
-		
+
+		currentState = "None";
 		context = getApplicationContext();
 		setContentView(R.layout.service_main);
 		associate = (Button) findViewById(R.id.associate);
@@ -151,7 +153,9 @@ public class DemoActivity extends Activity {
 				boolean start = intent.getExtras().getBoolean("state");
 
 				if(start)
-					test.setVisibility(View.INVISIBLE);
+					test.setText(R.string.noSimulations);
+				else
+					test.setText("Service running");
 
 				serviceActivate.setText(start ? "Start service" : "Stop Service");
 				serviceActivate.setEnabled(true);
@@ -166,7 +170,7 @@ public class DemoActivity extends Activity {
 
 				TextView stateText = (TextView) findViewById(R.id.stateText);
 				stateText.setText(state);
-
+				currentState = state;
 			}
 		};
 
@@ -228,8 +232,18 @@ public class DemoActivity extends Activity {
 
 		// Check service state and changes the button text
 		if (LOSTService.serviceActive) {
+			test.setText("Service running");
+			test.setVisibility(View.VISIBLE);
+
 			onServiceRunning();
 			return;
+		} else {
+			test.setText(R.string.noSimulations);
+			test.setVisibility(View.VISIBLE);
+			serviceActivate.setText("Start Service");
+			serviceActivate.setEnabled(true);
+			TextView stateText = (TextView) findViewById(R.id.stateText);
+			stateText.setText(LOSTService.getCurrentState());
 		}
 
 		// checks if there is internet connection
