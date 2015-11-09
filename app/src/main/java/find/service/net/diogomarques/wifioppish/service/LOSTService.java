@@ -121,9 +121,9 @@ public class LOSTService extends Service {
 		LOSTService.serviceActive = false;
 		LOSTService.synced = false;
 
-		Intent svcIntent = new Intent(
-				"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
-
+		//Intent svcIntent = new Intent(
+				//"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+		Intent svcIntent = new Intent(context, LOSTService.class);
 		// context.deleteDatabase("LOSTMessages");
 		ContentResolver cr = environment.getAndroidContext()
 				.getContentResolver();

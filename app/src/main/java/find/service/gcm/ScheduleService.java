@@ -13,6 +13,9 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.w3c.dom.ls.LSException;
+
 import find.service.net.diogomarques.wifioppish.sensors.LocationSensor;
 import find.service.net.diogomarques.wifioppish.service.LOSTService;
 
@@ -59,8 +62,9 @@ public class ScheduleService extends BroadcastReceiver {
 	private void handleStartAlarm() {
 	
 
-		Intent svcIntent = new Intent(
-				"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+		//Intent svcIntent = new Intent(
+		//		"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+		Intent svcIntent = new Intent(c, LOSTService.class);
 		c.startService(svcIntent);
 
 		final SharedPreferences preferences = c.getApplicationContext()
@@ -143,8 +147,9 @@ public class ScheduleService extends BroadcastReceiver {
 		Log.d(TAG, "Manually stopping service");
 		Notifications.generateNotification(c,"FIND Service" ,"Stopping service",null);
 
-		Intent svcIntent = new Intent(
-				"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+		//Intent svcIntent = new Intent(
+		//		"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+		Intent svcIntent = new Intent(c, LOSTService.class);
 		final SharedPreferences prefs = c.getSharedPreferences(
 				DemoActivity.class.getSimpleName(), Context.MODE_PRIVATE);
 		c.stopService(svcIntent);

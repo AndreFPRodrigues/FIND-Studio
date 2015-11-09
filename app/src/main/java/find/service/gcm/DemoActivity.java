@@ -440,8 +440,9 @@ public class DemoActivity extends Activity {
 		if (LOSTService.serviceActive) {
 			stop();
 		} else {
-			Intent svcIntent = new Intent(
-					"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+			//Intent svcIntent = new Intent(
+			//		"find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE");
+			Intent svcIntent = new Intent(this, LOSTService.class);
 			context.startService(svcIntent);
 			onServiceRunning();
 
