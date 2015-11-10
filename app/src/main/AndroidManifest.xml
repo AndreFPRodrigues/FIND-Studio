@@ -114,9 +114,11 @@
             android:enabled="true"
             android:exported="true"
              >
+            <!-- only explicit intents are allowed starting from lollipop
             <intent-filter>
                 <action android:name="find.service.net.diogomarques.wifioppish.service.LOSTService.START_SERVICE" />
             </intent-filter>
+            -->
         </service>
     </application>
 

@@ -141,6 +141,7 @@ public class StateInternetConn extends AState {
                 }
             } else {
                 Log.i("Webservice", "No messages to send");
+                success = true;
             }
 
         } catch (IOException e) {
